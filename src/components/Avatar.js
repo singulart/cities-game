@@ -12,7 +12,7 @@ const Avatar = ({ name, size = 48 }) => {
         borderRadius: '50%',
         overflow: 'hidden',
         flexShrink: 0,
-        backgroundColor: isAlice ? '#FFB6C1' : '#87CEEB'
+        position: 'relative',
       }}
     >
       <svg
@@ -20,83 +20,154 @@ const Avatar = ({ name, size = 48 }) => {
         height={size}
         viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
+        style={{ display: 'block' }}
       >
-        {/* Background circle */}
-        <circle cx="50" cy="50" r="50" fill={isAlice ? '#FFB6C1' : '#87CEEB'} />
+        {/* Gradient background */}
+        <defs>
+          <linearGradient id={isAlice ? 'aliceGrad' : 'bobGrad'} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={isAlice ? '#FF6B9D' : '#4A90E2'} />
+            <stop offset="100%" stopColor={isAlice ? '#C44569' : '#357ABD'} />
+          </linearGradient>
+          <linearGradient id={isAlice ? 'aliceHair' : 'bobHair'} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={isAlice ? '#FF8FAB' : '#5BA3F5'} />
+            <stop offset="100%" stopColor={isAlice ? '#E63946' : '#2E5C8A'} />
+          </linearGradient>
+          <filter id="shadow">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+            <feOffset dx="0" dy="2" result="offsetblur"/>
+            <feComponentTransfer>
+              <feFuncA type="linear" slope="0.3"/>
+            </feComponentTransfer>
+            <feMerge>
+              <feMergeNode/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        
+        {/* Background circle with gradient */}
+        <circle cx="50" cy="50" r="50" fill={`url(#${isAlice ? 'aliceGrad' : 'bobGrad'})`} />
         
         {isAlice ? (
-          // Alice's avatar - pink theme with long hair
+          // Alice's avatar - refined pink theme
           <>
-            {/* Hair */}
+            {/* Hair with gradient and shadow */}
             <path
-              d="M 20 30 Q 20 20 30 20 Q 50 15 70 20 Q 80 20 80 30 Q 80 50 75 60 Q 70 70 60 75 Q 50 80 40 75 Q 30 70 25 60 Q 20 50 20 30 Z"
-              fill="#FF69B4"
+              d="M 18 28 Q 18 18 28 18 Q 50 12 72 18 Q 82 18 82 28 Q 82 48 77 58 Q 72 68 62 73 Q 52 78 42 73 Q 32 68 27 58 Q 22 48 18 28 Z"
+              fill="url(#aliceHair)"
+              filter="url(#shadow)"
             />
-            {/* Face */}
-            <ellipse cx="50" cy="55" rx="25" ry="30" fill="#FFE4E1" />
-            {/* Eyes */}
-            <circle cx="42" cy="50" r="3" fill="#000" />
-            <circle cx="58" cy="50" r="3" fill="#000" />
-            {/* Nose */}
-            <ellipse cx="50" cy="58" rx="2" ry="3" fill="#FFB6C1" />
-            {/* Mouth */}
+            {/* Face with subtle gradient */}
+            <ellipse cx="50" cy="55" rx="26" ry="31" fill="#FFF5F7" />
+            <ellipse cx="50" cy="52" rx="24" ry="28" fill="#FFE8ED" opacity="0.6" />
+            {/* Eyes with highlights */}
+            <circle cx="42" cy="50" r="3.5" fill="#2C3E50" />
+            <circle cx="58" cy="50" r="3.5" fill="#2C3E50" />
+            <circle cx="43" cy="49" r="1.2" fill="#FFFFFF" opacity="0.9" />
+            <circle cx="59" cy="49" r="1.2" fill="#FFFFFF" opacity="0.9" />
+            {/* Eyebrows */}
             <path
-              d="M 45 65 Q 50 68 55 65"
-              stroke="#FF69B4"
-              strokeWidth="2"
+              d="M 38 45 Q 42 43 46 45"
+              stroke="#E63946"
+              strokeWidth="1.5"
               fill="none"
               strokeLinecap="round"
             />
-            {/* Hair details */}
             <path
-              d="M 25 35 Q 30 30 35 35"
-              stroke="#FF1493"
+              d="M 54 45 Q 58 43 62 45"
+              stroke="#E63946"
               strokeWidth="1.5"
               fill="none"
+              strokeLinecap="round"
+            />
+            {/* Nose */}
+            <ellipse cx="50" cy="58" rx="2" ry="3" fill="#FFB4C7" opacity="0.6" />
+            {/* Mouth with subtle smile */}
+            <path
+              d="M 44 65 Q 50 69 56 65"
+              stroke="#E63946"
+              strokeWidth="2.5"
+              fill="none"
+              strokeLinecap="round"
+            />
+            {/* Hair highlights */}
+            <path
+              d="M 25 32 Q 30 28 35 32"
+              stroke="#FFB8D4"
+              strokeWidth="2"
+              fill="none"
+              opacity="0.7"
             />
             <path
-              d="M 65 35 Q 70 30 75 35"
-              stroke="#FF1493"
-              strokeWidth="1.5"
+              d="M 65 32 Q 70 28 75 32"
+              stroke="#FFB8D4"
+              strokeWidth="2"
               fill="none"
+              opacity="0.7"
             />
+            {/* Cheek blush */}
+            <ellipse cx="35" cy="60" rx="4" ry="3" fill="#FFB4C7" opacity="0.3" />
+            <ellipse cx="65" cy="60" rx="4" ry="3" fill="#FFB4C7" opacity="0.3" />
           </>
         ) : (
-          // Bob's avatar - blue theme with short hair
+          // Bob's avatar - refined blue theme
           <>
-            {/* Hair */}
+            {/* Hair with gradient */}
             <path
-              d="M 25 25 Q 30 20 40 22 Q 50 20 60 22 Q 70 20 75 25 Q 78 30 75 35 Q 72 40 68 42 Q 65 45 60 47 Q 55 50 50 50 Q 45 50 40 47 Q 35 45 32 42 Q 28 40 25 35 Q 22 30 25 25 Z"
-              fill="#4169E1"
+              d="M 23 23 Q 28 18 38 20 Q 50 18 62 20 Q 72 18 77 23 Q 80 28 77 33 Q 74 38 70 40 Q 66 43 61 45 Q 56 48 50 48 Q 44 48 39 45 Q 34 43 30 40 Q 26 38 23 33 Q 20 28 23 23 Z"
+              fill="url(#bobHair)"
+              filter="url(#shadow)"
             />
-            {/* Face */}
-            <ellipse cx="50" cy="55" rx="25" ry="30" fill="#FFF8DC" />
-            {/* Eyes */}
-            <circle cx="42" cy="50" r="3" fill="#000" />
-            <circle cx="58" cy="50" r="3" fill="#000" />
-            {/* Nose */}
-            <ellipse cx="50" cy="58" rx="2" ry="3" fill="#DDA0DD" />
-            {/* Mouth */}
+            {/* Face with subtle gradient */}
+            <ellipse cx="50" cy="55" rx="26" ry="31" fill="#FFFEF9" />
+            <ellipse cx="50" cy="52" rx="24" ry="28" fill="#F5F3E8" opacity="0.6" />
+            {/* Eyes with highlights */}
+            <circle cx="42" cy="50" r="3.5" fill="#2C3E50" />
+            <circle cx="58" cy="50" r="3.5" fill="#2C3E50" />
+            <circle cx="43" cy="49" r="1.2" fill="#FFFFFF" opacity="0.9" />
+            <circle cx="59" cy="49" r="1.2" fill="#FFFFFF" opacity="0.9" />
+            {/* Eyebrows */}
             <path
-              d="M 45 65 Q 50 68 55 65"
-              stroke="#4169E1"
-              strokeWidth="2"
+              d="M 38 45 Q 42 43 46 45"
+              stroke="#2E5C8A"
+              strokeWidth="1.5"
               fill="none"
               strokeLinecap="round"
             />
-            {/* Hair texture */}
             <path
-              d="M 35 28 Q 40 25 45 28"
-              stroke="#1E90FF"
+              d="M 54 45 Q 58 43 62 45"
+              stroke="#2E5C8A"
               strokeWidth="1.5"
               fill="none"
+              strokeLinecap="round"
+            />
+            {/* Nose */}
+            <ellipse cx="50" cy="58" rx="2" ry="3" fill="#A8C5E0" opacity="0.6" />
+            {/* Mouth */}
+            <path
+              d="M 44 65 Q 50 69 56 65"
+              stroke="#357ABD"
+              strokeWidth="2.5"
+              fill="none"
+              strokeLinecap="round"
+            />
+            {/* Hair texture with highlights */}
+            <path
+              d="M 33 26 Q 38 23 43 26"
+              stroke="#7BB3F0"
+              strokeWidth="2"
+              fill="none"
+              opacity="0.7"
             />
             <path
-              d="M 55 28 Q 60 25 65 28"
-              stroke="#1E90FF"
-              strokeWidth="1.5"
+              d="M 57 26 Q 62 23 67 26"
+              stroke="#7BB3F0"
+              strokeWidth="2"
               fill="none"
+              opacity="0.7"
             />
+            {/* Subtle facial hair shadow */}
+            <ellipse cx="50" cy="70" rx="8" ry="2" fill="#2E5C8A" opacity="0.15" />
           </>
         )}
       </svg>
@@ -105,4 +176,3 @@ const Avatar = ({ name, size = 48 }) => {
 };
 
 export default Avatar;
-

@@ -74,46 +74,76 @@ function App() {
 
   return (
     <div className="App">
+      <div className="background-pattern"></div>
       <div className="chat-container">
         <div className="chat-header">
-          <h1>Cities Chat</h1>
-          <p className="subtitle">Alice and Bob are playing the cities game</p>
+          <div className="header-content">
+            <div className="header-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <div className="header-text">
+              <h1>Cities Game</h1>
+              <p className="subtitle">Alice & Bob are playing</p>
+            </div>
+          </div>
+          <div className="header-status">
+            <div className="status-indicator"></div>
+            <span>Live</span>
+          </div>
         </div>
         
         <div className="messages-container">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`message ${message.sender === 'Alice' ? 'message-alice' : 'message-bob'}`}
-            >
-              <div className="message-content">
-                <Avatar name={message.sender} size={40} />
-                <div className="message-bubble">
-                  <span className="message-text">{message.text}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-          
-          {typing && (
-            <div
-              className={`message ${typing === 'Alice' ? 'message-alice' : 'message-bob'}`}
-            >
-              <div className="message-content">
-                <Avatar name={typing} size={40} />
-                <div className="typing-indicator">
-                  <span className="typing-text">{typing} is typing</span>
-                  <div className="typing-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+          <div className="messages-wrapper">
+            {messages.map((message, index) => (
+              <div
+                key={message.id}
+                className={`message ${message.sender === 'Alice' ? 'message-alice' : 'message-bob'}`}
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <div className="message-content">
+                  <Avatar name={message.sender} size={44} />
+                  <div className="message-bubble-wrapper">
+                    <div className="message-bubble">
+                      <span className="message-text">{message.text}</span>
+                    </div>
+                    <div className="message-time">
+                      {new Date(message.id).toLocaleTimeString('en-US', { 
+                        hour: '2-digit', 
+                        minute: '2-digit',
+                        hour12: false 
+                      })}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-          
-          <div ref={messagesEndRef} />
+            ))}
+            
+            {typing && (
+              <div
+                className={`message ${typing === 'Alice' ? 'message-alice' : 'message-bob'} message-typing`}
+              >
+                <div className="message-content">
+                  <Avatar name={typing} size={44} />
+                  <div className="typing-indicator">
+                    <div className="typing-bubble">
+                      <span className="typing-text">{typing} is typing</span>
+                      <div className="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            <div ref={messagesEndRef} className="messages-end" />
+          </div>
         </div>
       </div>
     </div>
