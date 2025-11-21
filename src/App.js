@@ -16,20 +16,22 @@ import './App.css';
 import Avatar from './components/Avatar';
 import { getRandomCity } from './citiesData';
 
-// Custom MUI theme
+// Custom MUI theme with new color palette
 const theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#6366f1',
-      light: '#8b5cf6',
-      dark: '#4f46e5',
+      main: '#606c38',
+      light: '#8b9568',
+      dark: '#283618',
     },
     secondary: {
-      main: '#8b5cf6',
+      main: '#dda15e',
+      light: '#e8c088',
+      dark: '#bc6c25',
     },
     background: {
-      default: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+      default: 'linear-gradient(135deg, #283618 0%, #606c38 50%, #8b9568 100%)',
       paper: '#ffffff',
     },
   },
@@ -65,7 +67,7 @@ const StyledChatContainer = styled(Paper)(({ theme }) => ({
 }));
 
 const StyledHeader = styled(Box)(({ theme }) => ({
-  background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+  background: 'linear-gradient(135deg, #283618 0%, #606c38 100%)',
   color: 'white',
   padding: 0,
   boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.1) inset',
@@ -107,8 +109,8 @@ const StatusIndicator = styled(Box)({
   width: '8px',
   height: '8px',
   borderRadius: '50%',
-  background: '#10b981',
-  boxShadow: '0 0 0 2px rgba(16, 185, 129, 0.3), 0 0 8px rgba(16, 185, 129, 0.5)',
+  background: '#dda15e',
+  boxShadow: '0 0 0 2px rgba(221, 161, 94, 0.3), 0 0 8px rgba(221, 161, 94, 0.5)',
   animation: 'pulse 2s ease-in-out infinite',
   '@keyframes pulse': {
     '0%, 100%': {
@@ -126,7 +128,7 @@ const MessagesContainer = styled(Box)(({ theme }) => ({
   flex: 1,
   overflowY: 'auto',
   overflowX: 'hidden',
-  background: 'linear-gradient(to bottom, #f8fafc 0%, #f1f5f9 100%)',
+  background: 'linear-gradient(to bottom, #fefae0 0%, #f5f0d8 100%)',
   position: 'relative',
   '&::before': {
     content: '""',
@@ -216,12 +218,12 @@ const MessageBubble = styled(Chip)(({ theme, isAlice }) => ({
   transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
   backdropFilter: 'blur(10px)',
   border: isAlice 
-    ? '1px solid rgba(99, 102, 241, 0.1)' 
-    : '1px solid rgba(255, 255, 255, 0.1)',
+    ? '1px solid rgba(96, 108, 56, 0.15)' 
+    : '1px solid rgba(255, 255, 255, 0.2)',
   background: isAlice
-    ? 'linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%)'
-    : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-  color: isAlice ? '#1e293b' : '#ffffff',
+    ? 'linear-gradient(135deg, #fefae0 0%, #f5f0d8 100%)'
+    : 'linear-gradient(135deg, #dda15e 0%, #bc6c25 100%)',
+  color: isAlice ? '#283618' : '#ffffff',
   borderBottomLeftRadius: isAlice ? '6px' : '20px',
   borderBottomRightRadius: isAlice ? '20px' : '6px',
   '& .MuiChip-label': {
@@ -251,7 +253,7 @@ const MessageBubble = styled(Chip)(({ theme, isAlice }) => ({
 const SenderName = styled(Typography)(({ theme, isAlice }) => ({
   fontSize: '12px',
   fontWeight: 600,
-  color: isAlice ? '#6366f1' : '#8b5cf6',
+  color: isAlice ? '#606c38' : '#bc6c25',
   padding: '0 4px 2px 4px',
   letterSpacing: '0.3px',
   textTransform: 'capitalize',
@@ -259,7 +261,7 @@ const SenderName = styled(Typography)(({ theme, isAlice }) => ({
 
 const MessageTime = styled(Typography)(({ theme, isAlice }) => ({
   fontSize: '11px',
-  color: isAlice ? '#94a3b8' : 'rgba(255, 255, 255, 0.7)',
+  color: isAlice ? '#606c38' : 'rgba(255, 255, 255, 0.8)',
   fontWeight: 400,
   padding: '0 4px',
   opacity: 0.7,
@@ -271,16 +273,16 @@ const MessageTime = styled(Typography)(({ theme, isAlice }) => ({
 
 const TypingBubble = styled(Box)(({ theme, isAlice }) => ({
   background: isAlice
-    ? 'linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%)'
-    : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+    ? 'linear-gradient(135deg, #fefae0 0%, #f5f0d8 100%)'
+    : 'linear-gradient(135deg, #dda15e 0%, #bc6c25 100%)',
   padding: '14px 18px',
   borderRadius: '20px',
   borderBottomLeftRadius: isAlice ? '6px' : '20px',
   borderBottomRightRadius: isAlice ? '20px' : '6px',
   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04)',
   border: isAlice
-    ? '1px solid rgba(99, 102, 241, 0.1)'
-    : '1px solid rgba(255, 255, 255, 0.1)',
+    ? '1px solid rgba(96, 108, 56, 0.15)'
+    : '1px solid rgba(255, 255, 255, 0.2)',
   display: 'flex',
   alignItems: 'center',
   gap: '10px',
@@ -295,7 +297,7 @@ const TypingBubble = styled(Box)(({ theme, isAlice }) => ({
 
 const TypingText = styled(Typography)(({ theme, isAlice }) => ({
   fontSize: '13px',
-  color: isAlice ? '#64748b' : 'rgba(255, 255, 255, 0.9)',
+  color: isAlice ? '#606c38' : 'rgba(255, 255, 255, 0.9)',
   fontWeight: 400,
   fontStyle: 'italic',
   letterSpacing: '0.2px',
@@ -313,7 +315,7 @@ const TypingDots = styled(Box)(({ theme, isAlice }) => ({
     width: '6px',
     height: '6px',
     borderRadius: '50%',
-    background: isAlice ? '#94a3b8' : 'rgba(255, 255, 255, 0.8)',
+    background: isAlice ? '#606c38' : 'rgba(255, 255, 255, 0.8)',
     animation: 'typingDot 1.4s infinite ease-in-out',
     display: 'block',
     '&:nth-child(1)': {
@@ -422,7 +424,7 @@ function App() {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+          background: 'linear-gradient(135deg, #283618 0%, #606c38 50%, #8b9568 100%)',
           backgroundSize: '400% 400%',
           animation: 'gradientShift 15s ease infinite',
           padding: 0,
@@ -453,7 +455,7 @@ function App() {
                     margin: 0,
                     marginBottom: '4px',
                     fontSize: { xs: '18px', sm: '20px', md: '24px' },
-                    background: 'linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%)',
+                    background: 'linear-gradient(135deg, #ffffff 0%, #fefae0 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
