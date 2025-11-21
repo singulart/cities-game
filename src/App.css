@@ -283,6 +283,23 @@
   align-items: flex-end;
 }
 
+.message-sender-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  padding: 0 4px 2px 4px;
+  letter-spacing: 0.3px;
+  text-transform: capitalize;
+}
+
+.message-alice .message-sender-name {
+  color: #6366f1;
+}
+
+.message-bob .message-sender-name {
+  color: #8b5cf6;
+}
+
 .message-bubble {
   padding: 14px 18px;
   border-radius: 20px;
@@ -354,6 +371,7 @@
 .typing-indicator {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .typing-bubble {

@@ -24,10 +24,6 @@ const Avatar = ({ name, size = 48 }) => {
       >
         {/* Gradient background */}
         <defs>
-          <linearGradient id={isAlice ? 'aliceGrad' : 'bobGrad'} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor={isAlice ? '#FF6B9D' : '#4A90E2'} />
-            <stop offset="100%" stopColor={isAlice ? '#C44569' : '#357ABD'} />
-          </linearGradient>
           <linearGradient id={isAlice ? 'aliceHair' : 'bobHair'} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor={isAlice ? '#FF8FAB' : '#5BA3F5'} />
             <stop offset="100%" stopColor={isAlice ? '#E63946' : '#2E5C8A'} />
@@ -45,8 +41,8 @@ const Avatar = ({ name, size = 48 }) => {
           </filter>
         </defs>
         
-        {/* Background circle with gradient */}
-        <circle cx="50" cy="50" r="50" fill={`url(#${isAlice ? 'aliceGrad' : 'bobGrad'})`} />
+        {/* Background circle with neutral color that contrasts with both hair colors */}
+        <circle cx="50" cy="50" r="50" fill="#F5F3E8" />
         
         {isAlice ? (
           // Alice's avatar - refined pink theme
@@ -119,8 +115,8 @@ const Avatar = ({ name, size = 48 }) => {
               filter="url(#shadow)"
             />
             {/* Face with subtle gradient */}
-            <ellipse cx="50" cy="55" rx="26" ry="31" fill="#FFFEF9" />
-            <ellipse cx="50" cy="52" rx="24" ry="28" fill="#F5F3E8" opacity="0.6" />
+            <ellipse cx="50" cy="55" rx="26" ry="31" fill="#E8DCC6" />
+            <ellipse cx="50" cy="52" rx="24" ry="28" fill="#D4C4A8" opacity="0.7" />
             {/* Eyes with highlights */}
             <circle cx="42" cy="50" r="3.5" fill="#2C3E50" />
             <circle cx="58" cy="50" r="3.5" fill="#2C3E50" />

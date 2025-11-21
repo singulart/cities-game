@@ -107,6 +107,7 @@ function App() {
                 <div className="message-content">
                   <Avatar name={message.sender} size={44} />
                   <div className="message-bubble-wrapper">
+                    <div className="message-sender-name">{message.sender}</div>
                     <div className="message-bubble">
                       <span className="message-text">{message.text}</span>
                     </div>
@@ -128,13 +129,16 @@ function App() {
               >
                 <div className="message-content">
                   <Avatar name={typing} size={44} />
-                  <div className="typing-indicator">
-                    <div className="typing-bubble">
-                      <span className="typing-text">{typing} is typing</span>
-                      <div className="typing-dots">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                  <div className="message-bubble-wrapper">
+                    <div className="message-sender-name">{typing}</div>
+                    <div className="typing-indicator">
+                      <div className="typing-bubble">
+                        <span className="typing-text">{typing} is typing</span>
+                        <div className="typing-dots">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                        </div>
                       </div>
                     </div>
                   </div>
