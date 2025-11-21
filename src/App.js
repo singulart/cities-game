@@ -14,7 +14,8 @@ import {
 import { styled } from '@mui/material/styles';
 import './App.css';
 import Avatar from './components/Avatar';
-import { getRandomCity } from './citiesData';
+import { cities } from './citiesData';
+
 
 // Custom MUI theme with new color palette
 const theme = createTheme({
@@ -364,7 +365,8 @@ const BackgroundPattern = styled(Box)({
 function App() {
   const [messages, setMessages] = useState([]);
   const [typing, setTyping] = useState(null);
-  const [recentCities, setRecentCities] = useState([]);
+  const [lastCity, setLastCity] = useState(0);
+  const lastCityRef = useRef(0);
   const messagesEndRef = useRef(null);
   const conversationStarted = useRef(false);
 
@@ -381,10 +383,10 @@ function App() {
     conversationStarted.current = true;
 
     const startConversation = () => {
-      const firstCity = getRandomCity([]);
+      const firstCity = cities[lastCityRef.current];
       setMessages([{ sender: 'Alice', text: firstCity, id: Date.now() }]);
-      setRecentCities([firstCity]);
-      
+      setLastCity(prev => prev + 1);
+      lastCityRef.current += 1;
       setTimeout(() => {
         sendNextMessage('Bob', [firstCity]);
       }, 3000 + Math.random() * 2000);
@@ -395,7 +397,7 @@ function App() {
 
   const sendNextMessage = (sender, currentRecentCities) => {
     setTyping(sender);
-    
+
     // Pre-create message entry with stable ID for smooth transition
     const stableId = `msg-${sender}-${Date.now()}-${Math.random()}`;
     setMessages(prev => [...prev, { 
@@ -404,27 +406,29 @@ function App() {
       id: stableId,
       isTyping: true
     }]);
-    
+
     const delay = 3000 + Math.random() * 2000;
-    
+
     setTimeout(() => {
-      const city = getRandomCity(currentRecentCities);
-      const updatedRecentCities = [...currentRecentCities, city].slice(-5);
-      setRecentCities(updatedRecentCities);
-      
+      const city = cities[lastCityRef.current];
+
       // Update the same message entry instead of creating new one
       setMessages(prev => prev.map(msg => 
         msg.id === stableId 
           ? { sender, text: city, id: stableId, isTyping: false }
           : msg
       ));
-      
+
+      // increment both state and ref for next message
+      setLastCity(prev => prev + 1);
+      lastCityRef.current += 1;
+
       setTyping(null);
-      
+
       const nextSender = sender === 'Alice' ? 'Bob' : 'Alice';
-      
+
       setTimeout(() => {
-        sendNextMessage(nextSender, updatedRecentCities);
+        sendNextMessage(nextSender, []);
       }, 3000 + Math.random() * 2000);
     }, delay);
   };
@@ -477,7 +481,7 @@ function App() {
                     lineHeight: 1.2,
                   }}
                 >
-                  Cities Game
+                  AI agents playing Cities game
                 </Typography>
                 <Typography
                   sx={{
@@ -489,7 +493,7 @@ function App() {
                     color: 'rgba(255, 255, 255, 0.9)',
                   }}
                 >
-                  Alice & Bob are playing
+                  © Argorand                
                 </Typography>
               </Box>
             </HeaderContent>
