@@ -377,7 +377,8 @@ function App() {
 
     const startConversation = () => {
       const firstCity = getRandomCity([]);
-      setMessages([{ sender: 'Alice', text: firstCity, id: Date.now() }]);
+      const firstTimestamp = Date.now();
+      setMessages([{ sender: 'Alice', text: firstCity, id: firstTimestamp, timestamp: firstTimestamp }]);
       setRecentCities([firstCity]);
       
       setTimeout(() => {
@@ -391,6 +392,15 @@ function App() {
   const sendNextMessage = (sender, currentRecentCities) => {
     setTyping(sender);
     
+    // Pre-create message entry with stable ID for smooth transition
+    const stableId = `msg-${sender}-${Date.now()}-${Math.random()}`;
+    setMessages(prev => [...prev, { 
+      sender, 
+      text: '', 
+      id: stableId,
+      isTyping: true
+    }]);
+    
     const delay = 3000 + Math.random() * 2000;
     
     setTimeout(() => {
@@ -398,11 +408,13 @@ function App() {
       const updatedRecentCities = [...currentRecentCities, city].slice(-5);
       setRecentCities(updatedRecentCities);
       
-      setMessages(prev => [...prev, { 
-        sender, 
-        text: city, 
-        id: Date.now() 
-      }]);
+      // Update the same message entry instead of creating new one
+      const messageTimestamp = Date.now();
+      setMessages(prev => prev.map(msg => 
+        msg.id === stableId 
+          ? { sender, text: city, id: stableId, timestamp: messageTimestamp, isTyping: false }
+          : msg
+      ));
       
       setTyping(null);
       
@@ -490,6 +502,8 @@ function App() {
             <MessagesWrapper>
               {messages.map((message, index) => {
                 const isAlice = message.sender === 'Alice';
+                const showTyping = message.isTyping || (typing === message.sender && !message.text);
+                
                 return (
                   <Fade in key={message.id} timeout={500} style={{ transitionDelay: `${index * 50}ms` }}>
                     <MessageWrapper align={isAlice ? 'left' : 'right'}>
@@ -497,42 +511,36 @@ function App() {
                         <Avatar name={message.sender} size={44} />
                         <MessageBubbleWrapper align={isAlice ? 'left' : 'right'}>
                           <SenderName isAlice={isAlice}>{message.sender}</SenderName>
-                          <MessageBubble
-                            label={message.text}
-                            isAlice={isAlice}
-                          />
-                          <MessageTime isAlice={isAlice}>
-                            {new Date(message.id).toLocaleTimeString('en-US', { 
-                              hour: '2-digit', 
-                              minute: '2-digit',
-                              hour12: false 
-                            })}
-                          </MessageTime>
+                          {showTyping ? (
+                            <TypingBubble isAlice={isAlice}>
+                              <TypingText isAlice={isAlice}>{message.sender} is typing</TypingText>
+                              <TypingDots isAlice={isAlice}>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                              </TypingDots>
+                            </TypingBubble>
+                          ) : (
+                            <>
+                              <MessageBubble
+                                label={message.text}
+                                isAlice={isAlice}
+                              />
+                              <MessageTime isAlice={isAlice}>
+                                {new Date(message.timestamp || message.id).toLocaleTimeString('en-US', { 
+                                  hour: '2-digit', 
+                                  minute: '2-digit',
+                                  hour12: false 
+                                })}
+                              </MessageTime>
+                            </>
+                          )}
                         </MessageBubbleWrapper>
                       </MessageContent>
                     </MessageWrapper>
                   </Fade>
                 );
               })}
-              
-              {typing && (
-                <MessageWrapper align={typing === 'Alice' ? 'left' : 'right'}>
-                  <MessageContent align={typing === 'Alice' ? 'left' : 'right'}>
-                    <Avatar name={typing} size={44} />
-                    <MessageBubbleWrapper align={typing === 'Alice' ? 'left' : 'right'}>
-                      <SenderName isAlice={typing === 'Alice'}>{typing}</SenderName>
-                      <TypingBubble isAlice={typing === 'Alice'}>
-                        <TypingText isAlice={typing === 'Alice'}>{typing} is typing</TypingText>
-                        <TypingDots isAlice={typing === 'Alice'}>
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                        </TypingDots>
-                      </TypingBubble>
-                    </MessageBubbleWrapper>
-                  </MessageContent>
-                </MessageWrapper>
-              )}
               
               <Box ref={messagesEndRef} sx={{ height: '1px' }} />
             </MessagesWrapper>
