@@ -259,18 +259,6 @@ const SenderName = styled(Typography)(({ theme, isAlice }) => ({
   textTransform: 'capitalize',
 }));
 
-const MessageTime = styled(Typography)(({ theme, isAlice }) => ({
-  fontSize: '11px',
-  color: isAlice ? '#606c38' : 'rgba(255, 255, 255, 0.8)',
-  fontWeight: 400,
-  padding: '0 4px',
-  opacity: 0.7,
-  letterSpacing: '0.2px',
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '10px',
-  },
-}));
-
 const TypingBubble = styled(Box)(({ theme, isAlice }) => ({
   background: isAlice
     ? 'linear-gradient(135deg, #fefae0 0%, #f5f0d8 100%)'
@@ -377,8 +365,7 @@ function App() {
 
     const startConversation = () => {
       const firstCity = getRandomCity([]);
-      const firstTimestamp = Date.now();
-      setMessages([{ sender: 'Alice', text: firstCity, id: firstTimestamp, timestamp: firstTimestamp }]);
+      setMessages([{ sender: 'Alice', text: firstCity, id: Date.now() }]);
       setRecentCities([firstCity]);
       
       setTimeout(() => {
@@ -409,10 +396,9 @@ function App() {
       setRecentCities(updatedRecentCities);
       
       // Update the same message entry instead of creating new one
-      const messageTimestamp = Date.now();
       setMessages(prev => prev.map(msg => 
         msg.id === stableId 
-          ? { sender, text: city, id: stableId, timestamp: messageTimestamp, isTyping: false }
+          ? { sender, text: city, id: stableId, isTyping: false }
           : msg
       ));
       
@@ -521,19 +507,10 @@ function App() {
                               </TypingDots>
                             </TypingBubble>
                           ) : (
-                            <>
-                              <MessageBubble
-                                label={message.text}
-                                isAlice={isAlice}
-                              />
-                              <MessageTime isAlice={isAlice}>
-                                {new Date(message.timestamp || message.id).toLocaleTimeString('en-US', { 
-                                  hour: '2-digit', 
-                                  minute: '2-digit',
-                                  hour12: false 
-                                })}
-                              </MessageTime>
-                            </>
+                            <MessageBubble
+                              label={message.text}
+                              isAlice={isAlice}
+                            />
                           )}
                         </MessageBubbleWrapper>
                       </MessageContent>
