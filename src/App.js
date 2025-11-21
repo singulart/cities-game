@@ -213,6 +213,7 @@ const MessageBubbleWrapper = styled(Box)(({ theme, align }) => ({
 const MessageBubble = styled(Chip)(({ theme, isAlice }) => ({
   padding: '14px 18px',
   height: 'auto',
+  minHeight: 'auto',
   borderRadius: '20px',
   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04)',
   transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -226,6 +227,7 @@ const MessageBubble = styled(Chip)(({ theme, isAlice }) => ({
   color: isAlice ? '#283618' : '#ffffff',
   borderBottomLeftRadius: isAlice ? '6px' : '20px',
   borderBottomRightRadius: isAlice ? '20px' : '6px',
+  boxSizing: 'border-box',
   '& .MuiChip-label': {
     padding: 0,
     fontSize: '16px',
@@ -233,6 +235,7 @@ const MessageBubble = styled(Chip)(({ theme, isAlice }) => ({
     lineHeight: 1.5,
     letterSpacing: '-0.2px',
     textShadow: isAlice ? 'none' : '0 1px 2px rgba(0, 0, 0, 0.1)',
+    display: 'inline-block',
   },
   [theme.breakpoints.down('md')]: {
     padding: '12px 16px',
@@ -271,34 +274,48 @@ const TypingBubble = styled(Box)(({ theme, isAlice }) => ({
   border: isAlice
     ? '1px solid rgba(96, 108, 56, 0.15)'
     : '1px solid rgba(255, 255, 255, 0.2)',
-  display: 'flex',
+  display: 'inline-flex',
   alignItems: 'center',
-  gap: '10px',
+  gap: '6px',
   backdropFilter: 'blur(10px)',
+  boxSizing: 'border-box',
+  minHeight: 'auto',
+  height: 'auto',
+  lineHeight: 1.5,
   [theme.breakpoints.down('md')]: {
     padding: '12px 16px',
+    borderRadius: '18px',
   },
   [theme.breakpoints.down('sm')]: {
     padding: '10px 14px',
+    borderRadius: '16px',
   },
 }));
 
 const TypingText = styled(Typography)(({ theme, isAlice }) => ({
-  fontSize: '13px',
-  color: isAlice ? '#606c38' : 'rgba(255, 255, 255, 0.9)',
-  fontWeight: 400,
+  fontSize: '16px',
+  color: isAlice ? '#283618' : '#ffffff',
+  fontWeight: 500,
   fontStyle: 'italic',
-  letterSpacing: '0.2px',
+  letterSpacing: '-0.2px',
+  lineHeight: 1.5,
+  textShadow: isAlice ? 'none' : '0 1px 2px rgba(0, 0, 0, 0.1)',
+  display: 'inline-block',
+  [theme.breakpoints.down('md')]: {
+    fontSize: '15px',
+  },
   [theme.breakpoints.down('sm')]: {
-    fontSize: '12px',
+    fontSize: '14px',
   },
 }));
 
 const TypingDots = styled(Box)(({ theme, isAlice }) => ({
-  display: 'flex',
+  display: 'inline-flex',
   gap: '4px',
   alignItems: 'center',
-  paddingTop: '2px',
+  verticalAlign: 'middle',
+  marginLeft: '6px',
+  lineHeight: 1.5,
   '& span': {
     width: '6px',
     height: '6px',
